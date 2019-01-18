@@ -26,19 +26,24 @@ public class DienstagDishActivity extends Fragment
     public static final String LOG_TAG = MontagDishActivity.class.getName();
     public static final String REQUEST_URL = "https://api.jsonbin.io/b/5c415f3381fe89272a8ef7cd/4";
 
-    private Adapter2 mAdapter;
+    private DishAdapter mAdapter;
 
     ShimmerFrameLayout container;
-
+    LoaderManager loaderManager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_dish_montag,container,false);
+        List<Dish> dishes = new ArrayList<>();
+        ListView dishListView = view.findViewById(R.id.list_dish_montag);
 
-        ListView dishListView = view.findViewById(R.id.list_dish);
 
-        LoaderManager loaderManager = getActivity().getLoaderManager();
+
+
+        loaderManager = getActivity().getLoaderManager();
+
+        loaderManager.restartLoader(1,null,this);
 
 
         ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -48,16 +53,19 @@ public class DienstagDishActivity extends Fragment
         if(networkInfo !=null && networkInfo.isConnected()){
 
 
+                loaderManager.initLoader(1,null,this);
 
-            loaderManager.initLoader(1,null,this);
         }
 
         if (mAdapter==null){
-            mAdapter = new Adapter2(getActivity(),new ArrayList<Dish>());
+            mAdapter = new DishAdapter(getActivity(),new ArrayList<Dish>());
             dishListView.setAdapter(mAdapter);
+        }else {
+            mAdapter.clear();
         }
 
         Log.e(LOG_TAG,"Initializing the Loader Dienstag");
+
 
         return view;
     }
@@ -78,10 +86,11 @@ public class DienstagDishActivity extends Fragment
         mAdapter.clear();
         Log.e(LOG_TAG,"Initializing onFinished Dienstag Clear Adapter");
 
-
-       if (dishes != null && !dishes.isEmpty()) {
+        if (dishes != null && !dishes.isEmpty()) {
             mAdapter.addAll(dishes);
         }
+
+
     }
 
     @Override

@@ -15,8 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.facebook.shimmer.ShimmerFrameLayout;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class MittwochDishActivity extends Fragment
     public static final String LOG_TAG = MontagDishActivity.class.getName();
     public static final String REQUEST_URL = "https://api.jsonbin.io/b/5c415f3381fe89272a8ef7cd/4";
 
-    private Adapter3 mAdapter;
+    private DishAdapter mAdapter;
 
 
     @Nullable
@@ -34,7 +32,7 @@ public class MittwochDishActivity extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_dish_montag,container,false);
 
-        ListView dishListView = view.findViewById(R.id.list_dish);
+        ListView dishListView = view.findViewById(R.id.list_dish_montag);
 
         ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -48,7 +46,7 @@ public class MittwochDishActivity extends Fragment
         }
 
         if (mAdapter==null){
-            mAdapter = new Adapter3(getActivity(),new ArrayList<Dish>());
+            mAdapter = new DishAdapter(getActivity(),new ArrayList<Dish>());
             dishListView.setAdapter(mAdapter);
         }
 
@@ -70,7 +68,8 @@ public class MittwochDishActivity extends Fragment
     @Override
     public void onLoadFinished(Loader<List<Dish>> loader, List<Dish> dishes ) {
         Log.e(LOG_TAG,"Initializing onFinished Mittwoch");
-        mAdapter.clear();
+
+        //mAdapter.clear();
         Log.e(LOG_TAG,"Initializing onFinished Mittwoch Clear Adapter");
         //container.stopShimmerAnimation();
         Log.e(LOG_TAG,"Loading Animation Stoped Mittwoch");

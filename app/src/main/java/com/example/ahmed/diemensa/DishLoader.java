@@ -28,6 +28,12 @@ public class DishLoader extends AsyncTaskLoader {
     }
 
     @Override
+    protected void onReset() {
+        super.onReset();
+        onStopLoading();
+    }
+
+    @Override
     public Object loadInBackground() {
         if(mUrl==null){
             return null;

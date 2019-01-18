@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 
 public class DishMainActivity  extends AppCompatActivity {
         private DishPageAdapter mPageAdapter;
+    ViewPager mViewPager;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -16,16 +19,28 @@ public class DishMainActivity  extends AppCompatActivity {
 
         mPageAdapter = new DishPageAdapter(getSupportFragmentManager());
 
-        ViewPager mViewPager = findViewById(R.id.container);
+         mViewPager = findViewById(R.id.container);
 
-        setupViewPager(mViewPager);
+        this.addPages();
+        //setupViewPager(mViewPager);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
 
         tabLayout.setupWithViewPager(mViewPager);
     }
 
-    private void setupViewPager(ViewPager mViewPager) {
+    private void addPages()
+    {
+        DishPageAdapter adapter=new DishPageAdapter(this.getSupportFragmentManager());
+        adapter.addFragment(new MontagDishActivity(),"Montag");
+        adapter.addFragment(new DienstagDishActivity(),"Dienstag");
+        //adapter.addFragment(new MittwochDishActivity(),"Mittwoch");
+
+        //SET ADAPTER TO VP
+        mViewPager.setAdapter(adapter);
+    }
+
+   /* private void setupViewPager(ViewPager mViewPager) {
 
         DishPageAdapter adapter = new DishPageAdapter(getSupportFragmentManager());
 
@@ -36,5 +51,5 @@ public class DishMainActivity  extends AppCompatActivity {
 
         mViewPager.setAdapter(adapter);
 
-    }
+    }*/
 }

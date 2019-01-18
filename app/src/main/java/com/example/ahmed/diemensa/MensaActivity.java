@@ -16,7 +16,6 @@ import java.util.ArrayList;
  */
 public class MensaActivity extends AppCompatActivity {
 
-    private Bundle extra;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +50,7 @@ public class MensaActivity extends AppCompatActivity {
 
                     break;
                 case 1 :
-                     Intent infoMensaIntent = new Intent(MensaActivity.this,MondayDishAvtivity.class);
+                     Intent infoMensaIntent = new Intent(MensaActivity.this,DishMainActivity.class);
                         startActivity(infoMensaIntent);
                     Log.v("second Item: ", "Pressed");
             }

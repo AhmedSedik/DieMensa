@@ -11,9 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
 
-
-import com.facebook.shimmer.ShimmerFrameLayout;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +22,16 @@ public class MondayDishAvtivity extends AppCompatActivity
 
     private DishAdapter mAdapter;
 
+    LoaderManager loaderManager;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dish_montag);
-        List<Dish> dishes = new ArrayList<>();
+        //List<Dish> dishes = new ArrayList<>();
 
-        ListView dishListView = findViewById(R.id.list_dish);
+        ListView dishListView = findViewById(R.id.list_dish_montag);
 
 
         ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -41,7 +40,7 @@ public class MondayDishAvtivity extends AppCompatActivity
 
         if(networkInfo !=null && networkInfo.isConnected()){
 
-            LoaderManager loaderManager = getLoaderManager();
+            loaderManager = getLoaderManager();
 
             loaderManager.initLoader(1,null,this);
 

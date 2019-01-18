@@ -14,8 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-
-import com.facebook.shimmer.ShimmerFrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,20 +24,16 @@ public class MontagDishActivity extends Fragment
     public static final String REQUEST_URL = "https://api.jsonbin.io/b/5c415f3381fe89272a8ef7cd/4";
 
     private DishAdapter mAdapter;
-
-    ShimmerFrameLayout container;
-
+    private LoaderManager loaderManager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_dish_montag,container,false);
 
-        ListView dishListView = view.findViewById(R.id.list_dish);
+        ListView dishListView = view.findViewById(R.id.list_dish_montag);
 
-        LoaderManager loaderManager = getActivity().getLoaderManager();
-
-
+        loaderManager  = getActivity().getLoaderManager();
 
         ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -47,20 +41,16 @@ public class MontagDishActivity extends Fragment
 
         if(networkInfo !=null && networkInfo.isConnected()){
 
-
-
             loaderManager.initLoader(1,null,this);
 
         }
 
-
-
         if (mAdapter==null){
-            mAdapter = new DishAdapter(getActivity(),new ArrayList<Dish>());
+            mAdapter = new DishAdapter(this.getActivity(),new ArrayList<Dish>());
             dishListView.setAdapter(mAdapter);
+        }else {
+            mAdapter.clear();
         }
-
-
 
         Log.e(LOG_TAG,"Initializing the Loader Montag");
 
@@ -74,7 +64,6 @@ public class MontagDishActivity extends Fragment
 
         return new DishLoader(getActivity(),REQUEST_URL);
 
-
     }
 
     @Override
@@ -82,8 +71,7 @@ public class MontagDishActivity extends Fragment
         Log.e(LOG_TAG,"Initializing onFinished Montag");
         mAdapter.clear();
         Log.e(LOG_TAG,"Initializing onFinished Montag Clear Adapter");
-        //container.stopShimmerAnimation();
-        Log.e(LOG_TAG,"Loading Animation Stoped Montag");
+
 
        if (dishes != null && !dishes.isEmpty()) {
             mAdapter.addAll(dishes);
@@ -96,4 +84,6 @@ public class MontagDishActivity extends Fragment
         mAdapter.clear();
         Log.e(LOG_TAG,"Initializing onLoaderReset Montag Clear Adapter");
     }
+
+
 }
