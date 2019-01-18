@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">Die Mensa</string>
+
+    <!-- Mensa Names. -->
+    <string name="mensa_eap">Mensa Ernst-Abbe-Platz </string>
+    <string name="mensa_cz">Mensa Carl-Zeiss-Promenade</string>
+    <string name="mensa_philo">Mensa Philosophenweg</string>
+    <string name="mensa_hg">Cafeteria Uni-Hauptgebäude</string>
+    <string name="mensa_eah">Cafeteria EAH - Moritz-von-Rohr-Straße</string>
+    <string name="mensa_vgt">vegeTable</string>
+
+    <string name="space">------------------------------------------------------------------------</string>
+
+    <string name="daytime">Mittag Ausgabe A</string>
+    <string name="dish">Putengeschnetzeltes Thai Artmit Reis </string>
+    <string name="component">Inhalt: G,K,Mi,Sel</string>
+    <!-- Mensa Info EAP. -->
+    <string name="address_title_eap">Adresse</string>
+    <string name="address_info_eap">Mensa Ernst-Abbe-Platz\nErnst-Abbe-Platz 8\n  07743 Jena</string>
+    <string name="opening_hours_title_eap">Öffnungszeiten</string>
+    <string name="opening_hours_info_eap">Montag – Freitag\n
+                                    8.00 bis 20.00 Uhr\n
+                                    sowie Sonnabend: \n(während der Vorlesungszeiten)\n11.00 bis 14.00 Uhr\n
+                                    Frühstück Ausgabe:\n8.00 bis 10.15 Uhr\nMittag Ausgabe:\nvon 11.00 bis 14.15 Uhr\nSonderausgabe:\nab 15.00 Uhr\nAbend Ausgabe:\nab 17.00 Uhr
+    </string>
+    <string name="other_title_eap">Sonstiges</string>
+    <string name="other_info_eap"> Sitzplätze: 600\nPreisaufschlag für im Speisenplan-\ngenannte Gerichte\nBedienstete : 1,90 € / Gäste : 3,30 €
+    </string>
+
+
+    <!-- Mensa Info Carl Zeiss. -->
+    <string name="address_title_cz">Adresse</string>
+    <string name="address_info_cz">Mensa Carl-Zeiss-Promenade
+Carl-Zeiss-Promenade 6
+07745 Jena</string>
+    <string name="opening_hours_title_cz">Öffnungszeiten</string>
+    <string name="opening_hours_info_cz">
+Montag – Freitag
+7.00 bis 15.00 Uhr
+Mittagessen von 11.00 bis 14.00 Uhr
+    </string>
+    <string name="other_title_cz">Sonstiges</string>
+    <string name="other_info_cz"> Sitzplätze:  Mensa 700 / Kaffee-Bar 40 / Terrasse 120
+
+Preisaufschlag für im Speisenplan genannte Gerichte:
+
+Bedienstete : 1,90 € / Gäste : 3,30 €
+    </string>
+
+</resources>
