@@ -25,7 +25,16 @@ public class MontagDishActivity extends Fragment
 
     private DishAdapter mAdapter;
     private LoaderManager loaderManager;
+    public  List<Dish> list;
 
+
+    public  MontagDishActivity(){
+
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,6 +61,7 @@ public class MontagDishActivity extends Fragment
             mAdapter.clear();
         }
 
+        mAdapter.notifyDataSetChanged();
         Log.e(LOG_TAG,"Initializing the Loader Montag");
 
         return view;
@@ -61,8 +71,8 @@ public class MontagDishActivity extends Fragment
     public Loader<List<Dish>> onCreateLoader(int i, Bundle bundle) {
         Log.e(LOG_TAG,"Initializing OnCreate Loader Montag");
 
-
-        return new DishLoader(getActivity(),REQUEST_URL);
+        DishLoader loader = new DishLoader(getContext(),REQUEST_URL);
+        return loader;
 
     }
 
@@ -72,10 +82,11 @@ public class MontagDishActivity extends Fragment
         mAdapter.clear();
         Log.e(LOG_TAG,"Initializing onFinished Montag Clear Adapter");
 
-
        if (dishes != null && !dishes.isEmpty()) {
             mAdapter.addAll(dishes);
         }
+        loaderManager.restartLoader(1,null,this);
+        //loader.reset();
     }
 
     @Override

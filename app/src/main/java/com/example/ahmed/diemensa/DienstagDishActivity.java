@@ -34,16 +34,16 @@ public class DienstagDishActivity extends Fragment
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_dish_montag,container,false);
+        View view = inflater.inflate(R.layout.activity_dish_dienstag,container,false);
         List<Dish> dishes = new ArrayList<>();
-        ListView dishListView = view.findViewById(R.id.list_dish_montag);
+        ListView dishListViewDienstag = view.findViewById(R.id.list_dish_dienstag);
 
 
 
 
         loaderManager = getActivity().getLoaderManager();
 
-        loaderManager.restartLoader(1,null,this);
+        //loaderManager.restartLoader(2,null,this);
 
 
         ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -59,13 +59,13 @@ public class DienstagDishActivity extends Fragment
 
         if (mAdapter==null){
             mAdapter = new DishAdapter(getActivity(),new ArrayList<Dish>());
-            dishListView.setAdapter(mAdapter);
+            dishListViewDienstag.setAdapter(mAdapter);
         }else {
             mAdapter.clear();
         }
 
         Log.e(LOG_TAG,"Initializing the Loader Dienstag");
-
+        mAdapter.notifyDataSetChanged();
 
         return view;
     }
