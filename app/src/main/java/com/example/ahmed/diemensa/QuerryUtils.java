@@ -20,7 +20,7 @@ import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.example.ahmed.diemensa.MondayDishAvtivity.LOG_TAG;
+import static com.example.ahmed.diemensa.MondayDishActivity.LOG_TAG;
 
 public class QuerryUtils {
 

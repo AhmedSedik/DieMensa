@@ -7,31 +7,41 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MondayDishAvtivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<List<Dish>> {
+public class WednessdayActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<List<Dish>>{
 
-    public static final String LOG_TAG = MondayDishAvtivity.class.getName();
+
+    public static final String LOG_TAG = MondayDishActivity.class.getName();
     public static final String REQUEST_URL = "https://api.jsonbin.io/b/5c415f3381fe89272a8ef7cd/4";
 
     private DishAdapter mAdapter;
 
     LoaderManager loaderManager;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dish_montag);
+        setContentView(R.layout.activity_wednessday);
         //List<Dish> dishes = new ArrayList<>();
 
-        ListView dishListView = findViewById(R.id.list_dish_montag);
+
+
+        ListView dishListView = findViewById(R.id.list_wednessday);
 
 
         ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -59,7 +69,7 @@ public class MondayDishAvtivity extends AppCompatActivity
     @Override
     public Loader<List<Dish>> onCreateLoader(int i, Bundle bundle) {
         Log.e(LOG_TAG,"Initializing OnCreate Loader");
-       // container = (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container1);
+        // container = (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container1);
         //container.startShimmerAnimation();
         return new DishLoader(this,REQUEST_URL);
     }
@@ -67,7 +77,7 @@ public class MondayDishAvtivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<List<Dish>> loader, List<Dish> dishes ) {
         Log.e(LOG_TAG,"Initializing onFinished");
-        //mAdapter.clear();
+        mAdapter.clear();
         Log.e(LOG_TAG,"Initializing onFinished Cleat Adapter");
         Log.e(LOG_TAG,"Loading Animation Stoped");
 
@@ -81,5 +91,41 @@ public class MondayDishAvtivity extends AppCompatActivity
         Log.e(LOG_TAG,"Initializing onLoaderReset");
         mAdapter.clear();
         Log.e(LOG_TAG,"Initializing onLoaderReset Clear Adapter");
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dish,menu);
+
+        MenuItem item = menu.findItem(R.id.spinner);
+
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item); // get the spinner
+
+
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setTitle("Days:");
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.weekday_array,android.R.layout.simple_spinner_dropdown_item);
+
+
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i){
+                    case 0:
+                        Toast.makeText(WednessdayActivity.this, "Montag", Toast.LENGTH_SHORT).show();
+                    case 1:
+
+                        Log.e(LOG_TAG,"DienstagActivity");
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        return true;
     }
 }

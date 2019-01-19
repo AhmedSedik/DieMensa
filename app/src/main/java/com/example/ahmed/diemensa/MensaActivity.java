@@ -50,9 +50,10 @@ public class MensaActivity extends AppCompatActivity {
 
                     break;
                 case 1 :
-                     Intent infoMensaIntent = new Intent(MensaActivity.this,DishMainActivity.class);
+                     Intent infoMensaIntent = new Intent(MensaActivity.this,MondayDishActivity.class);
                         startActivity(infoMensaIntent);
                     Log.v("second Item: ", "Pressed");
+
             }
         }
     });

@@ -23,12 +23,15 @@
         <activity android:name=".InfoPopupEap"
             android:theme="@style/NoActionBar"
             />
-        <activity android:name=".MondayDishAvtivity"
+        <activity android:name=".MondayDishActivity"
             android:theme="@style/AppTheme"
             />
-        <activity android:name=".DishMainActivity">
+        <activity android:name=".TuesdayActivity"
+            android:theme="@style/AppTheme"/>
 
-        </activity>
+        <activity android:name=".WednessdayActivity"
+            android:theme="@style/AppTheme"
+            />
 
 
 
