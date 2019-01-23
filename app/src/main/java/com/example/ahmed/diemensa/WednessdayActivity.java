@@ -2,6 +2,7 @@ package com.example.ahmed.diemensa;
 
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -26,8 +27,8 @@ public class WednessdayActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<List<Dish>>{
 
 
-    public static final String LOG_TAG = MondayDishActivity.class.getName();
-    public static final String REQUEST_URL = "https://api.jsonbin.io/b/5c415f3381fe89272a8ef7cd/4";
+    public static final String LOG_TAG = MondayActivity.class.getName();
+    public static final String REQUEST_URL = "https://api.jsonbin.io/b/5c432a577b31f426f85cccb8";
 
     private DishAdapter mAdapter;
 
@@ -39,7 +40,7 @@ public class WednessdayActivity extends AppCompatActivity
         setContentView(R.layout.activity_wednessday);
         //List<Dish> dishes = new ArrayList<>();
 
-
+        getSupportActionBar().setTitle("Mittwoch");
 
         ListView dishListView = findViewById(R.id.list_wednessday);
 
@@ -101,24 +102,39 @@ public class WednessdayActivity extends AppCompatActivity
         Spinner spinner = (Spinner) MenuItemCompat.getActionView(item); // get the spinner
 
 
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //getSupportActionBar().setTitle("Days:");
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.weekday_array,android.R.layout.simple_spinner_dropdown_item);
 
 
         spinner.setAdapter(adapter);
+
+        Log.d(LOG_TAG, "Item number: "+ spinner.getSelectedItemId());
+
+            spinner.setSelection(2);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i){
-                    case 0:
+
+                    if(i==1){
                         Toast.makeText(WednessdayActivity.this, "Montag", Toast.LENGTH_SHORT).show();
-                    case 1:
+                        Intent intent = new Intent(WednessdayActivity.this,TuesdayActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
 
+                    if(i==0){
+                        Intent intent1 = new Intent(WednessdayActivity.this,MondayActivity.class);
+                        startActivity(intent1);
+                        finish();
                         Log.e(LOG_TAG,"DienstagActivity");
+                    }
 
-                }
+
+
+
             }
 
             @Override
@@ -127,5 +143,36 @@ public class WednessdayActivity extends AppCompatActivity
             }
         });
         return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        this.finish();
+        return true;
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d(LOG_TAG, "onStart: MittwochActivity");
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(LOG_TAG, "onStop: MittwochActivity");
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(LOG_TAG, "onPause: MittwochActivity");
+        this.finish();
+        super.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 }

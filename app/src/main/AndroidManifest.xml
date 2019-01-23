@@ -23,7 +23,7 @@
         <activity android:name=".InfoPopupEap"
             android:theme="@style/NoActionBar"
             />
-        <activity android:name=".MondayDishActivity"
+        <activity android:name=".MondayActivity"
             android:theme="@style/AppTheme"
             />
         <activity android:name=".TuesdayActivity"
@@ -32,8 +32,6 @@
         <activity android:name=".WednessdayActivity"
             android:theme="@style/AppTheme"
             />
-
-
 
 
     </application>

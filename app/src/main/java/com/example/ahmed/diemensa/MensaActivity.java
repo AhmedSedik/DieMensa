@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,8 @@ import java.util.ArrayList;
  */
 public class MensaActivity extends AppCompatActivity {
 
+    public final String classes[] = {"eap", "cz",
+            "philo", "hg", "eah", "vgt"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,22 +41,36 @@ public class MensaActivity extends AppCompatActivity {
 
     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-            Mensa mensa = mensas.get(i);
+            Mensa mensa = mensas.get(position);
 
-            switch (i){
+            switch (position){
                 case 0:
-                    Intent urlIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com"));
-                    startActivity(urlIntent);
+                    Log.v("First Item: ", "Pressed");
+                    Toast.makeText(MensaActivity.this, "First Items Pressed", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MensaActivity.this,MondayActivity.class);
+                    intent.putExtra("Branch",classes[position]);
+                   // intent.putExtra("Place",classes[position]);
+                    startActivity(intent);
+
                     Log.v("First Item: ", "Pressed");
 
                     break;
                 case 1 :
-                     Intent infoMensaIntent = new Intent(MensaActivity.this,MondayDishActivity.class);
-                        startActivity(infoMensaIntent);
-                    Log.v("second Item: ", "Pressed");
+                    Intent infoMensaIntent = new Intent(MensaActivity.this,MondayActivity.class);
 
+                    Log.v("second Item: ", "Pressed");
+                    infoMensaIntent.putExtra("Branch",classes[position]);
+                    infoMensaIntent.putExtra("Place",classes[position]);
+                    startActivity(infoMensaIntent);
+                    break;
+                case 2:
+                    Intent urlIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.google.com"));
+                    startActivity(urlIntent);
+                    Toast.makeText(MensaActivity.this, "Third Items Pressed", Toast.LENGTH_SHORT).show();
+
+                    break;
             }
         }
     });

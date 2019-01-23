@@ -10,6 +10,8 @@
     <string name="mensa_vgt">vegeTable</string>
 
     <string name="space">------------------------------------------------------------------------</string>
+    <string name="euro">€></string>
+
     <!-- Weakdays Array. -->
     <string-array name="weekday_array">
         <item>Montag</item>

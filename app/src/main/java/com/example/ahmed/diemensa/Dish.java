@@ -31,13 +31,24 @@ public class Dish {
         mPrice = price;
         mImageResId = imageResId;
     }*/
+  /*public Dish(String place){
+      mPlace = place;
+  }*/
 
-    public Dish(String place, String daytime, String dishName, String component, int price) {
+    public Dish(String place, String daytime, String dishName, String component, double price) {
         mPlace = place;
         mDayTime = daytime;
         mDish = dishName;
         mComponent = component;
         mPrice = price;
+    }
+    public Dish(String place, String daytime, String dishName, String component, double price,int imageResId) {
+        mPlace = place;
+        mDayTime = daytime;
+        mDish = dishName;
+        mComponent = component;
+        mPrice = price;
+        mImageResId = imageResId;
     }
 
     public String getmPlace(){
@@ -67,6 +78,10 @@ public class Dish {
     public int getmImageResId() {
         return mImageResId;
     }
+    public boolean hasImage(){
+        return mImageResId != NO_IMAGE_PROVIDED;
+    }
+
 
     public String getmComponent() {
         return mComponent;

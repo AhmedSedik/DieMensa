@@ -62,6 +62,8 @@ public class MensaAdapter extends ArrayAdapter<Mensa> {
 
             }
         });
+
+
         return listItemView;
     }
 }

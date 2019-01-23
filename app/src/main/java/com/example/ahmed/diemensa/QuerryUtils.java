@@ -1,5 +1,6 @@
 package com.example.ahmed.diemensa;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -15,16 +16,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.example.ahmed.diemensa.MondayDishActivity.LOG_TAG;
+import static com.example.ahmed.diemensa.MondayActivity.LOG_TAG;
 
 public class QuerryUtils {
-
-    ShimmerFrameLayout container;
+    private String place ;
+    private String daytime  ;
+    private String dishName ;
+    private String component ;
+    private  double price ;
 
     public QuerryUtils(){
 
@@ -122,22 +127,31 @@ public class QuerryUtils {
 
         try {
             JSONObject baseJsonResponse = new JSONObject(jsonResponse);
-            JSONArray dishArray = baseJsonResponse.getJSONArray("feature");
+            JSONArray dishArray = baseJsonResponse.getJSONArray("data");
 
             for(int i =0;i<dishArray.length();i++){
                 JSONObject currentDish = dishArray.getJSONObject(i);
 
                 JSONObject properties = currentDish.getJSONObject("properties");
 
-                String place = properties.getString("place");
-                String daytime = properties.getString("daytime");
-                String dishName = properties.getString("dish");
-                String component = properties.getString("inhalt");
-                int price = properties.getInt("price");
+                if(properties!=null) {
 
-                Dish dish  = new Dish(place,daytime,dishName,component,price);
+                    String place = properties.getString("place");
+                    String daytime = properties.getString("daytime");
+                    String dishName = properties.getString("dish");
+                    String component = properties.getString("inhalt");
+                    double price = properties.getDouble("price");
+                    Dish dish = new Dish(place, daytime, dishName, component, price);
+                    dishes.add(dish);
+                }
 
-                dishes.add(dish);
+
+            String mensaPlace = dishes.get(i).getmPlace();
+
+
+
+
+
 
 
             }

@@ -21,13 +21,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 public class TuesdayActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<List<Dish>> {
 
-    public static final String LOG_TAG = MondayDishActivity.class.getName();
-    public static final String REQUEST_URL = "https://api.jsonbin.io/b/5c42d92e2c87fa273072831f/1";
+    public static final String LOG_TAG = MondayActivity.class.getName();
+    public static final String REQUEST_URL = "https://api.jsonbin.io/b/5c432a577b31f426f85cccb8";
 
     private DishAdapter mAdapter;
 
@@ -101,7 +100,7 @@ public class TuesdayActivity extends AppCompatActivity
         Spinner spinner = (Spinner) MenuItemCompat.getActionView(item); // get the spinner
 
 
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //getSupportActionBar().setTitle("Days:");
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.weekday_array,android.R.layout.simple_list_item_1);
@@ -112,9 +111,9 @@ public class TuesdayActivity extends AppCompatActivity
         spinner.setAdapter(adapter);
 
         Log.d(LOG_TAG, "Item number: "+ spinner.getSelectedItemId());
-        if (spinner.getSelectedItemId()==0){
+
             spinner.setSelection(1);
-        }
+
 
 
 
@@ -122,18 +121,23 @@ public class TuesdayActivity extends AppCompatActivity
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i){
-                    case 0:
+//if i = 1 refresh
+                    if(i==0){
                         Log.e(LOG_TAG,"Tuesday Activity case 0");
-                        Intent intent = new Intent(TuesdayActivity.this,MondayDishActivity.class);
+                        Intent intent = new Intent(TuesdayActivity.this,MondayActivity.class);
                         startActivity(intent);
                         finish();
-                    case 1:
-                      //  Intent intent = new Intent(TuesdayActivity.this,MondayDishActivity.class);
-                       // startActivity(intent);
-                        Log.e(LOG_TAG,"Montag Activity");
+                    }
 
-                }
+                    if(i==2){
+                        Intent intent1 = new Intent(TuesdayActivity.this,WednessdayActivity.class);
+                        startActivity(intent1);
+                        finish();
+                        Log.e(LOG_TAG,"DienstagAvtivity");
+                    }
+
+
+
             }
 
             @Override
@@ -141,6 +145,11 @@ public class TuesdayActivity extends AppCompatActivity
 
             }
         });
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        this.finish();
         return true;
     }
 
