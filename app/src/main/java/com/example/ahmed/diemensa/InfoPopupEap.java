@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.r0adkll.slidr.Slidr;
+
 public class InfoPopupEap extends Activity {
 
     @Override
@@ -14,6 +16,8 @@ public class InfoPopupEap extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.info_popup);
+
+        Slidr.attach(this);
         ImageView popupImageView = findViewById(R.id.popup_text_view);
         TextView textView1 = findViewById(R.id.textView1);
         TextView textView2 = findViewById(R.id.textView2);

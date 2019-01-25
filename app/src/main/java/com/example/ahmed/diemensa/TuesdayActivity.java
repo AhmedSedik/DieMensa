@@ -38,7 +38,7 @@ public class TuesdayActivity extends AppCompatActivity
         setContentView(R.layout.activity_tuesday);
         //List<Dish> dishes = new ArrayList<>();
 
-        getSupportActionBar().setTitle("Dienstag");
+        //getSupportActionBar().setTitle("Dienstag");
 
         ListView dishListView = findViewById(R.id.list_tuesday);
 

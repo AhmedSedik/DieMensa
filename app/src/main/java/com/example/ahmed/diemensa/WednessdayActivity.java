@@ -40,7 +40,7 @@ public class WednessdayActivity extends AppCompatActivity
         setContentView(R.layout.activity_wednessday);
         //List<Dish> dishes = new ArrayList<>();
 
-        getSupportActionBar().setTitle("Mittwoch");
+        //getSupportActionBar().setTitle("Mittwoch");
 
         ListView dishListView = findViewById(R.id.list_wednessday);
 

@@ -12,15 +12,22 @@
     <string name="space">------------------------------------------------------------------------</string>
     <string name="euro">€></string>
 
+    <string name="montag">Montag</string>
+    <string name="dienstag">Dienstag</string>
+    <string name="mitwoch">Mitwoch</string>
+    <string name="donnerstag">Donnerstag</string>
+    <string name="freitag">Freitag</string>
+    <string name="samstag">Samstag</string>
+    <string name="sonntag">Sonntag</string>
     <!-- Weakdays Array. -->
     <string-array name="weekday_array">
-        <item>Montag</item>
-        <item>Dienstag</item>
-        <item>Mittwoch</item>
-        <item>Donnerstag</item>
-        <item>Freitag</item>
-        <item>Samstag</item>
-        <item>Sonntag</item>
+        <item>@string/montag </item>
+        <item>@string/dienstag</item>
+        <item>@string/mitwoch</item>
+        <item>@string/donnerstag</item>
+        <item>@string/freitag</item>
+        <item>@string/samstag</item>
+        <item>@string/sonntag</item>
 
     </string-array>
 

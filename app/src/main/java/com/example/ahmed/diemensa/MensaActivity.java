@@ -10,7 +10,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  *
@@ -33,6 +38,7 @@ public class MensaActivity extends AppCompatActivity {
         mensas.add(new Mensa(getString(R.string.mensa_eah),R.drawable.eahmensa));
         mensas.add(new Mensa(getString(R.string.mensa_vgt),R.drawable.vgtmensa));
 
+
         MensaAdapter adapter = new MensaAdapter(this,mensas);
 
         ListView listView = findViewById(R.id.list);
@@ -43,16 +49,18 @@ public class MensaActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-            Mensa mensa = mensas.get(position);
 
+
+            Mensa mensa = mensas.get(position);
+        //TODO check the current day and for the right Activity on that day
             switch (position){
                 case 0:
+
                     Log.v("First Item: ", "Pressed");
                     Toast.makeText(MensaActivity.this, "First Items Pressed", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MensaActivity.this,MondayActivity.class);
-                    intent.putExtra("Branch",classes[position]);
+                    getDayOfWeek(position);
                    // intent.putExtra("Place",classes[position]);
-                    startActivity(intent);
+
 
                     Log.v("First Item: ", "Pressed");
 
@@ -94,5 +102,37 @@ public class MensaActivity extends AppCompatActivity {
         });
 
 */
+    }
+    public void getDayOfWeek(int position){
+        //am starting to get date to populate in spinner
+        //here am getting the weekday so i can send information based upon
+        String dayNames[] = new DateFormatSymbols().getWeekdays();
+        Calendar date2 = Calendar.getInstance();//today
+        Toast.makeText(MensaActivity.this, "Today is "+ dayNames[date2.get(Calendar.DAY_OF_WEEK)], Toast.LENGTH_SHORT).show();
+        System.out.println("Today is a "
+                + dayNames[date2.get(Calendar.DAY_OF_WEEK)]);
+        String dayOfTheWeek = dayNames[date2.get(Calendar.DAY_OF_WEEK)];
+
+
+
+        Date date = new Date();
+        Calendar calendarToday = Calendar.getInstance();//today
+        calendarToday.setTime(date);
+        date = calendarToday.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy",Locale.getDefault());
+        calendarToday.add(Calendar.DATE,0);
+        String montagDate = dateFormat.format(date);
+
+        if(dayOfTheWeek.equals("Friday")){
+            Intent intent = new Intent(MensaActivity.this,MondayActivity.class);
+            intent.putExtra("Branch",classes[position]);
+            intent.putExtra("Friday","Friday");
+            startActivity(intent);
+        }
+
+
+
+
+        //End
     }
 }

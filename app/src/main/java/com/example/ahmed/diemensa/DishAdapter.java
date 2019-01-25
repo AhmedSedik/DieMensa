@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
@@ -60,6 +61,11 @@ public class DishAdapter extends ArrayAdapter<Dish> {
         NumberFormat format = NumberFormat.getCurrencyInstance(Locale.GERMANY);
         String currency = format.format(dish.getmPrice());
         priceTextView.setText(format2 + " €");
+
+        ImageView iconImageView = listDishesView.findViewById(R.id.icon_image_view);
+
+        iconImageView.setImageResource(R.drawable.eapmensa);
+
 
         return listDishesView;
     }

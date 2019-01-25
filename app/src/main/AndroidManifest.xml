@@ -21,10 +21,10 @@
         </activity>
 
         <activity android:name=".InfoPopupEap"
-            android:theme="@style/NoActionBar"
+            android:theme="@style/AppTheme.slidrTheme"
             />
         <activity android:name=".MondayActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.slidrTheme"
             />
         <activity android:name=".TuesdayActivity"
             android:theme="@style/AppTheme"/>

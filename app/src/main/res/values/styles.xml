@@ -44,4 +44,12 @@
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/font_green</item>
     </style>
+
+    <!-- Swipe Style. -->
+    <style name="AppTheme.slidrTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+
 </resources>

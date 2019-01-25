@@ -1,10 +1,7 @@
 package com.example.ahmed.diemensa;
 
-import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,9 +13,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,7 +27,8 @@ public class QuerryUtils {
     private String dishName ;
     private String component ;
     private  double price ;
-
+    public static long date;
+    public static ArrayList<String> ls;
     public QuerryUtils(){
 
     }
@@ -123,9 +121,43 @@ public class QuerryUtils {
         // is formatted, a JSONException exception object will be thrown.
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
 
-
-
         try {
+
+            JSONObject jsonObject =  new JSONObject(jsonResponse);
+            JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+
+            JSONObject jsonObject1 =null;
+            dishes = new ArrayList<>();
+
+            ls = new ArrayList<>();
+
+            for(int i=0;i<jsonArray.length();i++){
+                jsonObject1 = (JSONObject) jsonArray.get(i);
+                if(jsonObject1!=null){
+                    String name = jsonObject1.getString("dish");
+                    String daytime = jsonObject1.getString("daytime");
+                    String dishName = jsonObject1.getString("dish");
+                    String component = jsonObject1.getString("component");
+                    double price = jsonObject1.getDouble("price");
+                    String day= jsonObject1.getString("weakday");
+                    int iconId_1 = jsonObject1.getInt("iconid_1");
+                    int iconId_2 = jsonObject1.getInt("iconid_2");
+                    date = jsonObject1.getLong("date");
+                    Log.e(LOG_TAG, String.valueOf(date));
+
+                    ls.add(jsonObject1.getString("date"));
+                    Dish dish = new Dish(name,daytime,dishName,component,price,day,date,iconId_1,iconId_2);
+                    dishes.add(dish);
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+       /* try {
             JSONObject baseJsonResponse = new JSONObject(jsonResponse);
             JSONArray dishArray = baseJsonResponse.getJSONArray("data");
 
@@ -144,21 +176,14 @@ public class QuerryUtils {
                     Dish dish = new Dish(place, daytime, dishName, component, price);
                     dishes.add(dish);
                 }
-
-
             String mensaPlace = dishes.get(i).getmPlace();
-
-
-
-
-
-
-
             }
         } catch (JSONException e) {
             Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
-        }
+        }*/
 
         return dishes;
     }
+
+
 }

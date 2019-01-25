@@ -2,8 +2,11 @@
   <dictionary name="ahmed">
     <words>
       <w>dienstag</w>
+      <w>donnerstag</w>
+      <w>freitag</w>
       <w>mittwoch</w>
       <w>montag</w>
+      <w>samstag</w>
     </words>
   </dictionary>
 </component>
