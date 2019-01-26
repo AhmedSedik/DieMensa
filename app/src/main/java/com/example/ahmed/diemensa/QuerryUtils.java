@@ -94,6 +94,11 @@ public class QuerryUtils {
         return output.toString();
     }
     public static List<Dish> fetchData(String requestUrl){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         URL url = createUrl(requestUrl);
 

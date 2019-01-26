@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -38,21 +39,24 @@ import java.util.List;
 import java.util.Locale;
 
 public class MondayActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<List<Dish>> {
+        implements LoaderManager.LoaderCallbacks<List<Dish>>,SwipeRefreshLayout.OnRefreshListener {
 
     public static final String LOG_TAG = MondayActivity.class.getName();
     public String REQUEST_URL;
     public static final String REQUEST_URL_CZ = "https://api.jsonbin.io/b/5c43d51f2c87fa273072fae3/1";
-
+    private SwipeRefreshLayout swipeRefreshLayout;
     private DishAdapterTest mAdapter;
     LoaderManager loaderManager;
-    ArrayList<String> list;
     ArrayList<String> daysArrayList;
     ArrayAdapter<String> mArrayAdapter;
+    ListView dishListView;
     Date date;
     String montagDate;
     Calendar calendar;
-    public  Spinner spinner;
+    Intent intent;
+    public Spinner spinner;
+    private TextView mEmptyTextView;
+    private static final int LOADER_ID = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,16 +71,27 @@ public class MondayActivity extends AppCompatActivity
          */
         Slidr.attach(this);
 
+        swipeRefreshLayout = findViewById(R.id.swiperefresh);
 
-        ListView dishListView = findViewById(R.id.list_dish_montag);
+        // set color schemes on refresh view
+
+        // implement refresh listener
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshAdapter();
+            }
+        });
+        dishListView = findViewById(R.id.list_dish_montag);
         dishListView.setDivider(null);
         dishListView.setDividerHeight(0);
         dishListView.setVerticalScrollBarEnabled(false);
 
-        Intent intent = getIntent();
+        intent = getIntent();
         String info = intent.getStringExtra("Branch");
 
         TextView titleTextView = findViewById(R.id.title_mensa_text_view1);
+        mEmptyTextView = findViewById(R.id.empty_view);
 
         switch (info) {
             case "eap":
@@ -84,7 +99,9 @@ public class MondayActivity extends AppCompatActivity
                  * so it will go to the table of monday and fetch the data {@link REQUESTED_LINK}
                  */
                 titleTextView.setText(getString(R.string.mensa_eap));
-                REQUEST_URL = "http://192.168.178.22:81/mensa.php";
+
+                dateComparison();
+
                 break;
             case "cz":
                 titleTextView.setText(getString(R.string.mensa_cz));
@@ -94,23 +111,33 @@ public class MondayActivity extends AppCompatActivity
                 titleTextView.setText("");
 
         }
-
+        // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
+        // Get details on the currently active default data network
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-
+        // If there is a network connection, fetch data
         if (networkInfo != null && networkInfo.isConnected()) {
-
+            // Get a reference to the LoaderManager, in order to interact with loaders.
             loaderManager = getLoaderManager();
+            //Initialize the loader. Pass in the int ID constant defined above and pass in null for
+            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+            // because this activity implements the LoaderCallbacks interface).
+            loaderManager.initLoader(LOADER_ID, null, this);
 
-            loaderManager.initLoader(1, null, this);
-
+        } else {
+            // Otherwise, display error
+            // First, hide loading indicator so error message will be visible
+            View loadingIndicator = findViewById(R.id.loading_indicator);
+            loadingIndicator.setVisibility(View.GONE);
+            mEmptyTextView.setText(R.string.no_internet_connection);
         }
+        dishListView.setEmptyView(mEmptyTextView);
 
         if (mAdapter == null) {
 
             mAdapter = new DishAdapterTest(this, new ArrayList<Dish>());
             dishListView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
         }
 
 
@@ -121,6 +148,15 @@ public class MondayActivity extends AppCompatActivity
 
         Log.e(LOG_TAG, "Initializing the Loader");
 
+    }
+
+    private void refreshAdapter() {
+
+        getLoaderManager().restartLoader(LOADER_ID,null,MondayActivity.this );
+        Toast.makeText(MondayActivity.this, "Items Refreshed", Toast.LENGTH_SHORT).show();
+        Log.e(LOG_TAG, "Items Refreshed");
+        swipeRefreshLayout.setRefreshing(false);
+        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -135,12 +171,18 @@ public class MondayActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<List<Dish>> loader, List<Dish> dishes) {
         Log.e(LOG_TAG, "Initializing onFinished");
+        // Hide loading indicator because the data has been loaded
+        View loadingIndicator = findViewById(R.id.loading_indicator);
+        loadingIndicator.setVisibility(View.GONE);
+        // Set empty state text to display "No earthquakes found."
+        mEmptyTextView.setText(R.string.no_data);
         mAdapter.clear();
         Log.e(LOG_TAG, "Initializing onFinished Cleat Adapter");
         Log.e(LOG_TAG, "Loading Animation Stoped");
 
         if (dishes != null && !dishes.isEmpty()) {
             mAdapter.addAll(dishes);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -164,42 +206,42 @@ public class MondayActivity extends AppCompatActivity
 
         Intent intent = getIntent();
 
-        String friday = intent.getStringExtra("Friday");
+        String dayOfTheWeek = intent.getStringExtra("Saturday");
 
         date = new Date();
         calendar = Calendar.getInstance();
+
         calendar.setTime(date);
 
 
-        int i=0;
-        while(i<=5){
+        int i = 0;
+        while (i <= 5) {
 
-            if(i==0){
-                calendar.add(Calendar.DATE,0);
-            }else{
-                calendar.add(Calendar.DATE,1);
+            if (i == 0) {
+                calendar.add(Calendar.DATE, 0);
+            } else {
+                calendar.add(Calendar.DATE, 1);
             }
-                date = calendar.getTime();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMM yyyy",Locale.GERMANY);
+            date = calendar.getTime();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMM yyyy", Locale.GERMANY);
 
-                montagDate = dateFormat.format(date);
+            montagDate = dateFormat.format(date);
 
-                daysArrayList.add(i, String.valueOf(montagDate));
+            daysArrayList.add(i, String.valueOf(montagDate));
 
             Log.e("Array List: ", String.valueOf(daysArrayList));
             i++;
         }
 
 
-        if (friday.equals("Friday")) {
+        if (dayOfTheWeek.equals("Saturday")) {
 
-            for(int x = daysArrayList.size() - 2; x > 0; x--)
-            {
-                daysArrayList.remove(x+1);
+            for (int x = daysArrayList.size() - 2; x > 0; x--) {
+                daysArrayList.remove(x + 1);
             }
 
-        }else {
-            Log.e(LOG_TAG,"Today is not Friday");
+        } else {
+            Log.e(LOG_TAG, "Today is not Friday");
         }
 
        /* for (int i =0;i < weakday.length;i++) {
@@ -233,12 +275,25 @@ public class MondayActivity extends AppCompatActivity
 
                 }
                 if (i == 1) {
-                    Toast.makeText(MondayActivity.this, "Dienstag", Toast.LENGTH_SHORT).show();
+                    //TODO method for the 6 days Cases
+                    String days = spinner.getSelectedItem().toString();
+                    if(days.contains("Sonntag")){
+                        REQUEST_URL = "http://192.168.178.22:81/mensa_eap_tue.php";
+                    }
 
-                    Intent intent = new Intent(MondayActivity.this, TuesdayActivity.class);
-                    startActivity(intent);
-                    finish();
+                    getLoaderManager().restartLoader(LOADER_ID,null,MondayActivity.this );
+
+                    Toast.makeText(MondayActivity.this, "Dienstag", Toast.LENGTH_SHORT).show();
                     Log.e(LOG_TAG, "DienstagActivity");
+
+                    mAdapter.notifyDataSetChanged();
+
+
+
+                  /*  Intent intent = new Intent(MondayActivity.this, TuesdayActivity.class);
+                    startActivity(intent);
+                    finish();*/
+
                 }
                 if (i == 2) {
                     Intent intent = new Intent(MondayActivity.this, WednessdayActivity.class);
@@ -258,8 +313,19 @@ public class MondayActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        this.finish();
-        return true;
+        switch(item.getItemId()){
+
+            case R.id.refresh:
+                Log.e(LOG_TAG,"Refresh button triggered");
+                //tell SwipeRefreshLayout to start progress Indicator
+                swipeRefreshLayout.setRefreshing(true);
+                //update
+                refreshAdapter();
+                return true;
+        }
+        //this.finish();
+
+        return super.onOptionsItemSelected(item);
     }
 
     private int getIndex(Spinner spinner, String myString) {
@@ -272,6 +338,11 @@ public class MondayActivity extends AppCompatActivity
             }
         }
         return index;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -293,7 +364,44 @@ public class MondayActivity extends AppCompatActivity
 
         super.onPause();
     }
+
+    private void dateComparison(){
+        intent = getIntent();
+        //String friday = String.valueOf(intent.getExtras());
+        String dayNames[] = new DateFormatSymbols().getWeekdays();
+        date = new Date();
+        calendar = Calendar.getInstance();
+        String dayOfTheWeek =  dayNames[calendar.get(Calendar.DAY_OF_WEEK)];
+        calendar.setTime(date);
+        Bundle extras = intent.getExtras();
+
+
+        if(extras!=null)
+            if (extras.get("Saturday").equals(dayOfTheWeek)) {
+                Log.e("Today= ", dayOfTheWeek);
+                REQUEST_URL = "http://192.168.178.22:81/mensa_eap_mon.php";
+            }else if (extras.get("Sunday").equals(dayOfTheWeek)) {
+                Log.e("Today= ", dayOfTheWeek);
+                REQUEST_URL = "http://192.168.178.22:81/mensa_eap_tue.php";
+            }
+
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.e(LOG_TAG,"OnRefresh ");
+        /*swipeView.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                swipeView.setRefreshing(true);
+                handler.sendEmptyMessage(0);
+            }
+        }, 1000);*/
+    }
 }
+
+
 
  /*   String dayNames[] = new DateFormatSymbols().getWeekdays();
     Calendar date2 = Calendar.getInstance();

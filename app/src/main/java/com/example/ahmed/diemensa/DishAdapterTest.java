@@ -23,7 +23,7 @@ public class DishAdapterTest extends ArrayAdapter<Dish> {
 
 
     public DishAdapterTest(@NonNull Context context, List<Dish> dishes) {
-        super(context,0,dishes);
+        super(context, 0, dishes);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -35,36 +35,18 @@ public class DishAdapterTest extends ArrayAdapter<Dish> {
         ViewHolder holder = new ViewHolder();
 
 
-
-        if (convertView==null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_dish,
-                    parent,false);
+                    parent, false);
 
 
-                if(position %2 == 1){
-                    convertView.setBackgroundColor(convertView.getResources().getColor(R.color.font_green));
-                    notifyDataSetChanged();
-                } else {
-                    convertView.setBackgroundColor(convertView.getResources().getColor(R.color.background));
-                    notifyDataSetChanged();
-                }
-
-
-
-
-          /*  int i = 0;
-            while(i<=position){
-                if (i==position) {
-                    convertView.setBackgroundColor(convertView.getResources().getColor(R.color.font_green));
-                } else if (i==position+1) {
-                    convertView.setBackgroundColor(convertView.getResources().getColor(R.color.font_white));
-                }
-                    i++;
-            }*/
-
-
-
-
+            if (position % 2 == 1) {
+                convertView.setBackgroundColor(convertView.getResources().getColor(R.color.font_green));
+                notifyDataSetChanged();
+            } else {
+                convertView.setBackgroundColor(convertView.getResources().getColor(R.color.background));
+                notifyDataSetChanged();
+            }
 
             holder.daytimeTextView = convertView.findViewById(R.id.daytime_text_view);
             holder.dishTextView = convertView.findViewById(R.id.dish_text_view);
@@ -75,35 +57,32 @@ public class DishAdapterTest extends ArrayAdapter<Dish> {
             holder.icon1ImageView = convertView.findViewById(R.id.icon_image_view1);
             convertView.setTag(holder);
 
-        }else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         Dish dish = getItem(position);
 
-            holder.daytimeTextView.setText(dish.getmDayTime());
+        holder.daytimeTextView.setText(dish.getmDayTime());
 
-            holder.dishTextView.setText(dish.getmDish());
-            holder.componentTextView.setText(dish.getmComponent());
-            double originalPrice = dish.getmPrice();
-            NumberFormat format = NumberFormat.getCurrencyInstance(Locale.GERMANY);
-            String Price = format.format(originalPrice);
+        holder.dishTextView.setText(dish.getmDish());
+        holder.componentTextView.setText(dish.getmComponent());
+        double originalPrice = dish.getmPrice();
+        NumberFormat format = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+        String Price = format.format(originalPrice);
 
-            //String format2 = new DecimalFormat("#,###.00").format(dish.getmPrice());
-            holder.priceTextView.setText(Price);
+        //String format2 = new DecimalFormat("#,###.00").format(dish.getmPrice());
+        holder.priceTextView.setText(Price);
 
-            int icon_id = getIcon(dish.getmImageResId1());
-             holder.iconImageView.setImageResource(icon_id);
-            int icon_id2 = getIcon(dish.getmImageResId2());
+        int icon_id = getIcon(dish.getmImageResId1());
+        holder.iconImageView.setImageResource(icon_id);
+        int icon_id2 = getIcon(dish.getmImageResId2());
 
-            holder.icon1ImageView.setImageResource(icon_id2);
+        holder.icon1ImageView.setImageResource(icon_id2);
 
-        Date dateObject  = new Date(dish.getmDate());
-
-        int listCount = convertView.getHeight();
-        Log.e("ListView Height", String.valueOf(listCount));
         return convertView;
     }
+
     static class ViewHolder {
         // The ViewHolder design pattern
         TextView daytimeTextView;
@@ -113,9 +92,10 @@ public class DishAdapterTest extends ArrayAdapter<Dish> {
         ImageView iconImageView;
         ImageView icon1ImageView;
     }
-    private int getIcon(int iconId){
+
+    private int getIcon(int iconId) {
         int mIconId;
-        switch (iconId){
+        switch (iconId) {
             case 21:
                 mIconId = R.drawable.international;
                 break;
@@ -130,8 +110,8 @@ public class DishAdapterTest extends ArrayAdapter<Dish> {
                 break;
 
 
-                default:
-                    mIconId = 0;
+            default:
+                mIconId = 0;
 
 
         }
@@ -139,9 +119,9 @@ public class DishAdapterTest extends ArrayAdapter<Dish> {
     }
 
     private String formatDate(Date dateObject) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy",Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         //SimpleDateFormat.setTimeZone(java.util.TimeZone.getTimeZone("GMT-4"));
-        return  dateFormat.format(dateObject);
+        return dateFormat.format(dateObject);
 
 
     }

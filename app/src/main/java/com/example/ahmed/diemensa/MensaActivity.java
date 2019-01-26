@@ -103,15 +103,15 @@ public class MensaActivity extends AppCompatActivity {
 
 */
     }
-    public void getDayOfWeek(int position){
+    private void getDayOfWeek(int position){
         //am starting to get date to populate in spinner
         //here am getting the weekday so i can send information based upon
         String dayNames[] = new DateFormatSymbols().getWeekdays();
-        Calendar date2 = Calendar.getInstance();//today
-        Toast.makeText(MensaActivity.this, "Today is "+ dayNames[date2.get(Calendar.DAY_OF_WEEK)], Toast.LENGTH_SHORT).show();
+        Calendar calendar = Calendar.getInstance();//today
+        Toast.makeText(MensaActivity.this, "Today is "+ dayNames[calendar.get(Calendar.DAY_OF_WEEK)], Toast.LENGTH_SHORT).show();
         System.out.println("Today is a "
-                + dayNames[date2.get(Calendar.DAY_OF_WEEK)]);
-        String dayOfTheWeek = dayNames[date2.get(Calendar.DAY_OF_WEEK)];
+                + dayNames[calendar.get(Calendar.DAY_OF_WEEK)]);
+        String dayOfTheWeek = dayNames[calendar.get(Calendar.DAY_OF_WEEK)];
 
 
 
@@ -123,13 +123,20 @@ public class MensaActivity extends AppCompatActivity {
         calendarToday.add(Calendar.DATE,0);
         String montagDate = dateFormat.format(date);
 
-        if(dayOfTheWeek.equals("Friday")){
+
+        //sending which day of the week we are in as package
+        Intent intent = new Intent(MensaActivity.this,MondayActivity.class);
+        intent.putExtra("Branch",classes[position]);
+        intent.putExtra("Saturday",dayOfTheWeek);
+        startActivity(intent);
+
+        /*if(dayOfTheWeek.equals("Saturday")){
             Intent intent = new Intent(MensaActivity.this,MondayActivity.class);
             intent.putExtra("Branch",classes[position]);
-            intent.putExtra("Friday","Friday");
+            intent.putExtra("Saturday","Saturday");
             startActivity(intent);
         }
-
+*/
 
 
 

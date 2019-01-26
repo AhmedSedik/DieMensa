@@ -32,6 +32,10 @@ dependencies {
     implementation 'com.r0adkll:slidableactivity:2.0.6'
     //styled Spin loader
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
+    //horizontal items
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
     // CardView
     implementation 'com.android.support:cardview-v7:27.1.1'
     testImplementation 'junit:junit:4.12'
