@@ -127,7 +127,8 @@ public class MensaActivity extends AppCompatActivity {
         //sending which day of the week we are in as package
         Intent intent = new Intent(MensaActivity.this,MondayActivity.class);
         intent.putExtra("Branch",classes[position]);
-        intent.putExtra("Saturday",dayOfTheWeek);
+        //TODO
+        intent.putExtra("Tuesday",dayOfTheWeek);
         startActivity(intent);
 
         /*if(dayOfTheWeek.equals("Saturday")){
@@ -137,8 +138,6 @@ public class MensaActivity extends AppCompatActivity {
             startActivity(intent);
         }
 */
-
-
 
         //End
     }

@@ -29,10 +29,6 @@
         <activity android:name=".TuesdayActivity"
             android:theme="@style/AppTheme"/>
 
-        <activity android:name=".WednessdayActivity"
-            android:theme="@style/AppTheme"
-            />
-
 
     </application>
 

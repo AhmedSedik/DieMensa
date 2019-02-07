@@ -130,8 +130,7 @@ public class TuesdayActivity extends AppCompatActivity
                     }
 
                     if(i==2){
-                        Intent intent1 = new Intent(TuesdayActivity.this,WednessdayActivity.class);
-                        startActivity(intent1);
+
                         finish();
                         Log.e(LOG_TAG,"DienstagAvtivity");
                     }

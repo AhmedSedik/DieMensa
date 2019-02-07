@@ -51,5 +51,11 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <!-- Rating Bar Style. -->
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/font_green</item>
+        <item name="colorControlActivated">#689f38</item>
+    </style>
+
 
 </resources>

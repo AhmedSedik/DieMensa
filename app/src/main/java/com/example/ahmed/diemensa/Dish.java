@@ -2,8 +2,6 @@ package com.example.ahmed.diemensa;
 
 public class Dish {
 
-
-
     private final long mDate;
     //private final int mWeak;
     private  String mDay;
@@ -14,6 +12,7 @@ public class Dish {
     private int mImageResId1 = NO_IMAGE_PROVIDED;
     private int mImageResId2 = NO_IMAGE_PROVIDED;
     private static final int NO_IMAGE_PROVIDED = -1;
+    private  String mLikes;
 
   /*public Dish(String place){
       mPlace = place;
@@ -27,8 +26,9 @@ public class Dish {
         mComponent = component;
         mPrice = price;
     }
+
     public Dish(String place, String daytime, String dishName, String component, double price,
-                String weakday,long date,int imageResid,int imageResId2) {
+                String weakday,long date,int imageResid,int imageResId2,String likes) {
         mPlace = place;
         mDayTime = daytime;
         mDish = dishName;
@@ -38,18 +38,12 @@ public class Dish {
         mDate = date;
         mImageResId1 = imageResid;
         mImageResId2 = imageResId2;
-
-
-
-
+        mLikes = likes;
     }
 
     public String getmPlace(){
         return mPlace;
     }
-
-
-
     public String getmDay() {
         return mDay;
     }
@@ -87,5 +81,12 @@ public class Dish {
 
     public long getmDate() {
         return mDate;
+    }
+
+    public String  getmLikes() {
+        return mLikes;
+    }
+    public void setmLikes(String mLikes) {
+        this.mLikes = mLikes;
     }
 }

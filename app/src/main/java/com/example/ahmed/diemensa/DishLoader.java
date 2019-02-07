@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.util.List;
 
-public class DishLoader extends AsyncTaskLoader {
+public class DishLoader extends AsyncTaskLoader<List<Dish>> {
     private String mUrl;
 
     public DishLoader(Context context,String url) {
@@ -21,25 +21,25 @@ public class DishLoader extends AsyncTaskLoader {
         Log.v("Loader:","onStartLoading");
     }
 
-    @Override
+   /* @Override
     protected void onStopLoading() {
-       cancelLoad();
+       //cancelLoad();
         Log.v("Loader:","onStopLoading");
     }
 
-    @Override
+   /* @Override
     protected void onReset() {
         super.onReset();
         onStopLoading();
     }
-
+*/
     @Override
-    public Object loadInBackground() {
+    public List<Dish> loadInBackground() {
         if(mUrl==null){
             return null;
         }
 
-        List<Dish> dishes  = QuerryUtils.fetchData(mUrl);
+        List<Dish> dishes  = QueryUtils.fetchData(mUrl);
         Log.v("Loader:","loadingInBackground");
         return dishes;
     }
