@@ -3,7 +3,7 @@ package com.example.ahmed.diemensa.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.ahmed.diemensa.Dish;
+import com.example.ahmed.diemensa.Model.Dish;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -11,17 +11,17 @@ import java.util.Arrays;
 import java.util.List;
 
 
-class SharedPreference {
+public class SharedPreference {
 
     private static final String PREFS_NAME = "PRODUCT_APP";
     private static final String FAVORITES = "Product_Favorite";
 
-    SharedPreference() {
+    public SharedPreference() {
         super();
     }
 
     // This four methods are used for maintaining favorites.
-    private void saveFavorites(Context context, List<Dish> favorites) {
+    public void saveFavorites(Context context, List<Dish> favorites) {
         SharedPreferences settings;
         SharedPreferences.Editor editor;
 
@@ -35,7 +35,7 @@ class SharedPreference {
 
         editor.apply();
     }
-    void addFavorite(Context context, Dish product) {
+    public void addFavorite(Context context, Dish product) {
         List<Dish> favorites = getFavorites(context);
         if (favorites == null)
             favorites = new ArrayList<Dish>();
@@ -43,7 +43,7 @@ class SharedPreference {
         saveFavorites(context, favorites);
     }
 
-    void removeFavorite(Context context, Dish product) {
+    public void removeFavorite(Context context, Dish product) {
         ArrayList<Dish> favorites = getFavorites(context);
         if (favorites != null) {
             favorites.remove(product);
@@ -52,7 +52,7 @@ class SharedPreference {
         }
     }
 
-    ArrayList<Dish> getFavorites(Context context) {
+   public ArrayList<Dish> getFavorites(Context context) {
         SharedPreferences preferences;
         List<Dish> favorites;
 

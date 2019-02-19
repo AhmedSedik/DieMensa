@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "998594890775",
+    "firebase_url": "https://mensa-jena.firebaseio.com",
+    "project_id": "mensa-jena",
+    "storage_bucket": "mensa-jena.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998594890775:android:08cc806cce15180e",
+        "android_client_info": {
+          "package_name": "com.example.ahmed.diemensa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998594890775-fm4iknhqqfo1ojupv3dspnl6l05k73au.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ahmed.diemensa",
+            "certificate_hash": "353e4000b5a4686778870b771cf081b1c06901ac"
+          }
+        },
+        {
+          "client_id": "998594890775-dnkt6rq6hdf4amr1e304tlo9b3ttmbqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpeH_1cSua-jCdTpRaOSNIVvrfR5ZQfak"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998594890775-dnkt6rq6hdf4amr1e304tlo9b3ttmbqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

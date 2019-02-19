@@ -1,4 +1,4 @@
-package com.example.ahmed.diemensa;
+package com.example.ahmed.diemensa.PopUps;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ahmed.diemensa.R;
 import com.r0adkll.slidr.Slidr;
 
 public class InfoPopupEap extends Activity {

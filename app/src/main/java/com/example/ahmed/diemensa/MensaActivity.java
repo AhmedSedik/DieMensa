@@ -66,7 +66,7 @@ public class MensaActivity extends AppCompatActivity {
 
                     break;
                 case 1 :
-                    Intent infoMensaIntent = new Intent(MensaActivity.this,MondayActivity.class);
+                    Intent infoMensaIntent = new Intent(MensaActivity.this,MainActivity.class);
 
                     Log.v("second Item: ", "Pressed");
                     infoMensaIntent.putExtra("Branch",classes[position]);
@@ -125,7 +125,7 @@ public class MensaActivity extends AppCompatActivity {
 
 
         //sending which day of the week we are in as package
-        Intent intent = new Intent(MensaActivity.this,MondayActivity.class);
+        Intent intent = new Intent(MensaActivity.this,MainActivity.class);
         intent.putExtra("Branch",classes[position]);
         //TODO
         intent.putExtra("Tuesday",dayOfTheWeek);

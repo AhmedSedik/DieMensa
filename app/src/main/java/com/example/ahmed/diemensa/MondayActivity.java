@@ -1,37 +1,36 @@
 package com.example.ahmed.diemensa;
 
-import android.app.LoaderManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.r0adkll.slidr.Slidr;
+import com.example.ahmed.diemensa.Adapter.RecyclerAdapter;
+import com.example.ahmed.diemensa.Firebase.FirebaseDBHelper;
+import com.example.ahmed.diemensa.Interfaces.OnItemClickListener;
+import com.example.ahmed.diemensa.Model.Dish;
+import com.example.ahmed.diemensa.Utils.SharedPreference;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,80 +38,285 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MondayActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<List<Dish>>,SwipeRefreshLayout.OnRefreshListener {
+public class MondayActivity extends Fragment implements OnItemClickListener {
 
     public static final String LOG_TAG = MondayActivity.class.getName();
-    public String REQUEST_URL;
-    public static final String REQUEST_URL_CZ = "https://api.jsonbin.io/b/5c43d51f2c87fa273072fae3/1";
-    private SwipeRefreshLayout swipeRefreshLayout;
-
-    LoaderManager loaderManager;
     ArrayList<String> daysArrayList;
     ArrayAdapter<String> mArrayAdapter;
-    //TODO change to RecyclerView
-
     Date date;
     String montagDate;
     Calendar calendar;
-    Intent intent;
     public Spinner spinner;
-    TextView mEmptyTextView;
-    private static final int LOADER_ID = 1;
-    private ArrayList<Dish> dishList;
+    private RecyclerView recyclerView;
+    private RecyclerAdapter mAdapter;
+    private DatabaseReference mRef;
+    private DatabaseReference likesRef;
+    private FirebaseDatabase mDatabase;
+    private List<Dish> dishList;
+    private SharedPreference sharedPreference;
+    public ImageView heart;
+    public Fragment fragment;
+    CoordinatorLayout coordinatorLayout;
+    public FirebaseDBHelper firebaseDbHelper;
+    OnItemClickListener mListener;
 
-    RecyclerView recyclerView;
-    private List<Dish> dishList1 =   new ArrayList<>();
-    private RecyclerAdapter dishAdapter;
 
-    private EditText insertText;
-    private FirebaseFirestore db =FirebaseFirestore.getInstance();
-    private CollectionReference likesRef = db.collection("likes");
+    public MondayActivity(){
+
+    }
+
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_monday);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //setContentView(R.layout.activity_monday);
 
-        getSupportActionBar().setTitle("");
+        firebaseDbHelper = new FirebaseDBHelper();
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("");
+        //Toolbar toolbar = getView().findViewById(R.id.toolbar_slide);
 
-
+        coordinatorLayout = getView().findViewById(R.id.cs_layout);
         //getting the back functionality for back button or any unassigned item in the menu
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         /**to attach the slider i added theme slidrTheme in styles and manifest
          * android:background="@color/background_material_light"  in XML
          */
-        Slidr.attach(this);
+        //Slidr.attach(getActivity());
 
-        swipeRefreshLayout = findViewById(R.id.swiperefresh);
+        //setHasOptionsMenu(true);
 
-        FloatingActionButton contactActionButton = findViewById(R.id.fb_contact);
+        /*FloatingActionButton contactActionButton = findViewById(R.id.fb_contact);
         FloatingActionButton contactActionButton2 = findViewById(R.id.fb_info);
-        contactActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        contactActionButton.setOnClickListener((View v) -> {
+
                 Toast.makeText(MondayActivity.this, "FAB Clicked", Toast.LENGTH_SHORT).show();
 
-            }
         });
-        // set color schemes on refresh view
-
-        // implement refresh listener
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshAdapter();
-            }
-        });
-
-        contactActionButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        contactActionButton2.setOnClickListener((View v) ->{
                 Toast.makeText(MondayActivity.this, "FAB2 Clicked", Toast.LENGTH_SHORT).show();
+        });
+
+        floatingActionMenu = findViewById(R.id.floating_menu);
+        cs = findViewById(R.id.cs_layout);*/
+
+
+        ImageView locationButton = getView().findViewById(R.id.btn_location);
+        locationButton.setOnClickListener(this::getMensaLocation);
+
+
+        heart  =  getView().findViewById(R.id.imgbtn_favorite);
+        sharedPreference = new SharedPreference();
+        recyclerView = getView().findViewById(R.id.recycler_view_dish);
+
+
+        FirebaseDBHelper dbHelper = new FirebaseDBHelper();
+        dbHelper.readData(new FirebaseDBHelper.DataStatus() {
+            @Override
+            public void DataIsLoaded(List<Dish> dishes) {
+                dishList = new ArrayList<>();
+                dishList = dishes;
+                sharedPreference = new SharedPreference();
+
+                //RecyclerConfig.recyclerAdapter = new RecyclerAdapter(getContext(),dishes);
+
+                FirebaseApp.initializeApp(getContext());
+                RecyclerConfig config = new RecyclerConfig();
+
+                config.setConfig(recyclerView,getContext(),dishes);
+
+
+                //new RecyclerConfig().setConfig(recyclerView,getContext(),dishes);
+
+
+                RecyclerConfig.recyclerAdapter.setOnItemClickListener(MondayActivity.this);
             }
         });
 
-        intent = getIntent();
+
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        getActivity().setTitle("");
+        return inflater.inflate(R.layout.activity_monday, container, false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        //Toast.makeText(this, "Position" + position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onLikedButton(int position) {
+        Dish dish = dishList.get(position);
+        //update @specific key or id for the dish
+        final String itemKey = dish.getKey();
+        int value = dish.getLikes();
+
+
+        int addedValue = value + 1;
+
+        //Toast.makeText(this, "Like Pos" + position, Toast.LENGTH_SHORT).show();
+        likesRef = FirebaseDatabase.getInstance().getReference("dish")
+                .child(itemKey).child("likes");
+
+        likesRef.setValue(addedValue).addOnSuccessListener(aVoid -> {
+            //Toast.makeText(DishActivity.this, "Likes updated Successfully", Toast.LENGTH_SHORT).show();
+        });
+
+
+    }
+    @Override
+    public void onUnlikedButton(int position) {
+        Dish dish = dishList.get(position);
+        //update @specific key or id for the dish
+        final String itemKey = dish.getKey();
+        int value = dish.getLikes();
+
+        int addedValue = value - 1;
+        //Toast.makeText(this, "unLike Pos" + position, Toast.LENGTH_SHORT).show();
+        likesRef = FirebaseDatabase.getInstance().getReference("dish")
+                .child(itemKey).child("likes");
+
+        likesRef.setValue(addedValue).addOnSuccessListener(aVoid -> {
+            //Toast.makeText(DishActivity.this, "Likes Removed Successfully", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    @Override
+    public void getLikes(int position) {
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        Log.i("FragCreateList","onCreateOptionsMenu called");
+        super.onCreateOptionsMenu(menu,menuInflater);
+        menu.clear();
+        menuInflater.inflate(R.menu.menu_dish, menu);
+        MenuItem item = menu.findItem(R.id.spinner);
+
+        spinner = (Spinner) MenuItemCompat.getActionView(item); // get the spinner
+
+        daysArrayList = new ArrayList<>();
+
+        Intent intent = getActivity().getIntent();
+        //TODO Change everyday
+        String dayOfTheWeek = intent.getStringExtra("Tuesday");
+
+        date = new Date();
+        calendar = Calendar.getInstance();
+
+        calendar.setTime(date);
+
+
+        int i = 0;
+        while (i <= 5) {
+
+            if (i == 0) {
+                calendar.add(Calendar.DATE, 0);
+            } else {
+                calendar.add(Calendar.DATE, 1);
+            }
+            date = calendar.getTime();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMM yyyy", Locale.GERMANY);
+
+            montagDate = dateFormat.format(date);
+
+            daysArrayList.add(i, String.valueOf(montagDate));
+
+            Log.e("Array List: ", String.valueOf(daysArrayList));
+            i++;
+        }
+        mArrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item
+                , daysArrayList);
+
+        mArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner.setAdapter(mArrayAdapter);
+
+        //here may be i can get the day and date from the @DB
+        spinner.setSelection(mArrayAdapter.getPosition("Montag"));
+
+
+        mArrayAdapter.notifyDataSetChanged();
+
+
+        spinner.setSelection(0);
+
+        //adapter.notifyDataSetChanged();
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == 0) {
+
+                    Toast.makeText(getContext(), "Montag Activity", Toast.LENGTH_SHORT).show();
+
+                }
+                if (i == 1) {
+                    //TODO method for the 6 days Cases
+                    String days = spinner.getSelectedItem().toString();
+                    //TODO change every fckn Day bec we still dont have a fckn Database
+                    if(days.contains("Mittwoch")){
+
+                    }
+
+
+
+                    Toast.makeText(getContext(), "Dienstag", Toast.LENGTH_SHORT).show();
+                    Log.e(LOG_TAG, "DienstagActivity");
+
+                    mAdapter.notifyDataSetChanged();
+
+
+
+                  /*  Intent intent = new Intent(MondayActivity.this, TuesdayActivity.class);
+                    startActivity(intent);
+                    finish();*/
+
+                }
+                if (i == 2) {
+                    //Intent intent = new Intent(MondayActivity.this, TuesdayActivity.class);
+                    //startActivity(intent);
+                    //finish();
+                }
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Log.e(LOG_TAG, "onNothing Selected ");
+            }
+        });
+        //return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void getMensaLocation(View view) {//TODO check wich location
+        Uri mensaUri = Uri.parse("geo:0,0?q= Ernst-Abbe-Platz 8, 07743 Jena");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, mensaUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
+
+    }
+
+
+
+    /*  intent = getIntent();
         String info = intent.getStringExtra("Branch");
 
         TextView titleTextView = findViewById(R.id.title_mensa_text_view1);
@@ -122,7 +326,7 @@ public class MondayActivity extends AppCompatActivity
             case "eap":
                 /**must get the data according to the activity day with in this case Monday in each branch
                  * so it will go to the table of monday and fetch the data {@link REQUESTED_LINK}
-                 */
+
                 titleTextView.setText(getString(R.string.mensa_eap));
 
                 dateComparison();
@@ -135,98 +339,22 @@ public class MondayActivity extends AppCompatActivity
             default:
                 titleTextView.setText("");
 
-        }
-        recyclerView = findViewById(R.id.recycler_view_dish);
-        dishAdapter = new RecyclerAdapter(this,dishList1);
-        //recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, 0));
-        //recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        recyclerView.setAdapter(dishAdapter);
-
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListner(this, recyclerView, new RecyclerTouchListner.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Dish book = dishList1.get(position);
-                Toast.makeText(MondayActivity.this, book.getmDate() + "is simply clicked", Toast.LENGTH_SHORT).show();
-                Toast.makeText(MondayActivity.this, book.getmDate() + "is simply clicked", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-                Dish book = dishList1.get(position);
-                Toast.makeText(MondayActivity.this, book.getmImageResId1() + "is long clicked", Toast.LENGTH_SHORT).show();
-
-            }
-        }));
-        //checking network and type of Connection
-        checkNetworkConnection();
-        //recyclerView.setEmptyView(mEmptyTextView);
-
-        Log.e(LOG_TAG, "Initializing the Loader");
-
-    }
+        }*/
 
 
-    private void refreshAdapter() {
+      /*  private void refreshAdapter () {
 
-        getLoaderManager().restartLoader(LOADER_ID,null,MondayActivity.this );
-        Toast.makeText(MondayActivity.this, "Items Refreshed", Toast.LENGTH_SHORT).show();
-        Log.e(LOG_TAG, "Items Refreshed");
+            getLoaderManager().restartLoader(LOADER_ID, null, MondayActivity.this);
+            Toast.makeText(MondayActivity.this, "Items Refreshed", Toast.LENGTH_SHORT).show();
+            Log.e(LOG_TAG, "Items Refreshed");
 
-        swipeRefreshLayout.setRefreshing(false);
-        dishAdapter.notifyDataSetChanged();
-    }
-
-
-    @Override
-    public Loader<List<Dish>> onCreateLoader(int i, Bundle bundle) {
-        Log.e(LOG_TAG, "Initializing OnCreate Loader");
-        // container = (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container1);
-        //container.startShimmerAnimation();
-        if (dishList1.size() > 0) {
-            dishList1.clear();
+            swipeRefreshLayout.setRefreshing(false);
             dishAdapter.notifyDataSetChanged();
-        }
-        return new DishLoader(this, REQUEST_URL);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Dish>> loader, List<Dish> dishes) {
-        Log.e(LOG_TAG, "Initializing onFinished");
-        // Hide loading indicator because the data has been loaded
-        View loadingIndicator = findViewById(R.id.loading_indicator);
-        loadingIndicator.setVisibility(View.GONE);
-
-        // Set empty state text to display "No earthquakes found."
-        //mEmptyTextView.setText(R.string.no_data);
-        //dishAdapter.clear();
-        dishList1.clear();
-        Log.e(LOG_TAG, "Initializing onFinished Cleat Adapter");
-        Log.e(LOG_TAG, "Loading Animation Stoped");
-
-        if (dishes != null && !dishes.isEmpty()) {
-            //dishAdapter.addAll(dishList1);
-            dishList1.clear();
-            dishList1 = dishes;
-            dishAdapter.setData(dishes);
+        }*/
 
 
-        }
-    }
 
-    @Override
-    public void onLoaderReset(Loader<List<Dish>> loader) {
-        Log.e(LOG_TAG, "Initializing onLoaderReset");
-        //dishAdapter.clear();
-        dishList1.clear();
-        Log.e(LOG_TAG, "Initializing onLoaderReset Clear Adapter");
-    }
-
-    @Override
+  /*  @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dish, menu);
 
@@ -266,7 +394,7 @@ public class MondayActivity extends AppCompatActivity
             i++;
         }
 
-       /* //TODO Change Every day
+        //TODO Change Every day
         if (dayOfTheWeek.equals("Monday")) {
 
             for (int x = daysArrayList.size() - 2; x > 0; x--) {
@@ -277,9 +405,9 @@ public class MondayActivity extends AppCompatActivity
             Log.e(LOG_TAG, "Today is not Monday");
         }
 
-       /* for (int i =0;i < weakday.length;i++) {
+        for (int i =0;i < weakday.length;i++) {
             daysArrayList.add(weakday[i]);
-        }*/
+        }
 
 
         mArrayAdapter = new ArrayAdapter<>(this, R.layout.spinner_item
@@ -323,11 +451,6 @@ public class MondayActivity extends AppCompatActivity
                     dishAdapter.notifyDataSetChanged();
 
 
-
-                  /*  Intent intent = new Intent(MondayActivity.this, TuesdayActivity.class);
-                    startActivity(intent);
-                    finish();*/
-
                 }
                 if (i == 2) {
                     Intent intent = new Intent(MondayActivity.this, TuesdayActivity.class);
@@ -354,7 +477,7 @@ public class MondayActivity extends AppCompatActivity
                 //tell SwipeRefreshLayout to start progress Indicator
                 swipeRefreshLayout.setRefreshing(true);
                 //update
-                refreshAdapter();
+                //refreshAdapter();
                 return true;
         }
         //this.finish();
@@ -399,7 +522,7 @@ public class MondayActivity extends AppCompatActivity
         super.onPause();
     }
 
-    private void dateComparison(){
+  /*  private void dateComparison(){
         intent = getIntent();
         //String friday = String.valueOf(intent.getExtras());
         String dayNames[] = new DateFormatSymbols().getWeekdays();
@@ -422,7 +545,7 @@ public class MondayActivity extends AppCompatActivity
             }
 
     }
-    public void checkNetworkConnection(){
+  / public void checkNetworkConnection(){
         // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         // Get details on the currently active default data network
@@ -443,12 +566,12 @@ public class MondayActivity extends AppCompatActivity
             loadingIndicator.setVisibility(View.GONE);
             mEmptyTextView.setText(R.string.no_internet_connection);
         }
-    }
+    }*/
 
 
-    @Override
-    public void onRefresh() {
-        Log.e(LOG_TAG,"OnRefresh ");
+  /*      @Override
+        public void onRefresh () {
+            Log.e(LOG_TAG, "OnRefresh ");
         /*swipeView.postDelayed(new Runnable() {
 
             @Override
@@ -457,8 +580,9 @@ public class MondayActivity extends AppCompatActivity
                 handler.sendEmptyMessage(0);
             }
         }, 1000);*/
-    }
-}
+        }
+
+
 
 
 

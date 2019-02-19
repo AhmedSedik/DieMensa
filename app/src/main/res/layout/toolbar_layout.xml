@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbar_slide"
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
+    style="@style/MyActionBar"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    app:layout_scrollFlags="scroll|enterAlways">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/dd"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                >
+
+                <TextView
+                    android:id="@+id/text_mensa_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="top"
+                    android:textColor="@color/font_grey"
+                    android:text="@string/mensa_eap" />
+                <TextView
+                    android:id="@+id/text_mensa_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/font_grey"
+                    android:text="Ernst-Abbe-Platz 8" />
+                <TextView
+                    android:id="@+id/text_mensa_plz"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="bottom"
+                    android:textColor="@color/font_grey"
+
+                    android:text="07743 Jena" />
+
+            </LinearLayout>
+        <ImageView
+            android:id="@+id/btn_location"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            app:srcCompat="@drawable/ic_baseline_location_on_24px"
+            android:contentDescription="@string/app_name" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.Toolbar>
+
